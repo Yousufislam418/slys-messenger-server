@@ -4,10 +4,8 @@ const port = process.env.PORT || 3000;
 require('dotenv').config();
 const app = express();
 app.use(express.json());
-app.use(cors({
-  origin: ['http://127.0.0.1:5500','http://127.0.0.1:7700','http://127.0.0.1:5501'],
-  credentials: "include"
-}));
+app.use(cors());
+// app.use(cors({origin: ['http://127.0.0.1:5500','http://127.0.0.1:7700','http://127.0.0.1:5501']}));
 
 app.get('/', async(req,res)=> {
     res.send('This is Slys Messenger Server');
@@ -61,7 +59,7 @@ app.get('/message-datas', async(req,res)=> {
 
 //----------------------------------------------------->
     await client.db("admin").command({ ping: 1 });
-    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // await client.close();
   }
@@ -71,4 +69,4 @@ run().catch(console.dir);
 
 //---------------------------------------------------------------->
 
-// app.listen(port, ()=> console.log('Slys Messenger Server is Running on port -', port));
+app.listen(port, ()=> console.log('Slys Messenger Server is Running on port -', port));
