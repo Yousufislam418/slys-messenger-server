@@ -10,6 +10,7 @@ app.use(
       "http://127.0.0.1:5500",
       "http://127.0.0.1:7700",
       "http://127.0.0.1:5501",
+      "https://slys-messenger-server.vercel.app/user-datas",
     ],
     credentials: true,
   })
@@ -79,4 +80,4 @@ run().catch(console.dir);
 
 //---------------------------------------------------------------->
 
-// app.listen(port, ()=> console.log('Slys Messenger Server is Running on port -', port));
+app.listen(port, ()=> console.log('Slys Messenger Server is Running on port -', port));
