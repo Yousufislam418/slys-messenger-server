@@ -1,11 +1,21 @@
 const express = require('express');
 const cors = require('cors');
 const port = process.env.PORT || 3000;
-require('dotenv').config();
+require('dotenv').config(); 
 const app = express();
+// middlewareAdd commentMore actions
+app.use(
+  cors({
+    origin: [
+      "http://127.0.0.1:5500",
+      "http://127.0.0.1:7700",
+      "http://127.0.0.1:5501",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
-app.use(cors());
-// app.use(cors({origin: ['http://127.0.0.1:5500','http://127.0.0.1:7700','http://127.0.0.1:5501']}));
+
 
 app.get('/', async(req,res)=> {
     res.send('This is Slys Messenger Server');
