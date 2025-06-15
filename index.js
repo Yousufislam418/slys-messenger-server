@@ -1,91 +1,60 @@
+// index.js
 const express = require('express');
-const cors = require('cors');
 const mongoose = require('mongoose');
-const port = process.env.PORT || 3000;
-require('dotenv').config(); 
+const cors = require('cors');
+const User = require('./models/User');
+
+require('dotenv').config(); // যদি .env ব্যবহার করো
+
 const app = express();
-// middlewareAdd commentMore actions
-app.use(
-  cors({
-    origin: [
-      "http://127.0.0.1:5500",
-      "http://127.0.0.1:7700",
-      "http://127.0.0.1:5501",
-      "https://slys-messenger-server.vercel.app/user-datas",
-    ],
-    credentials: true,
-  })
-);
+const port = 3000;
+
+// Middleware
+app.use(cors());
 app.use(express.json());
-
-
-app.get('/', async(req,res)=> {
-    res.send('This is Slys Messenger Server');
-});
-
-//----------------------------------------------------------------> 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-
-const client = new MongoClient(process.env.MONGODB_URI, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
-});
 
 // MongoDB connect
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => console.log('✅ MongoDB connected'))
+.then(() => {
+  console.log('✅ MongoDB connected');
+  // console.log(console.log('📂 Connected Database Name:', mongoose.connection.db.databaseName));
+})
 .catch(err => console.error('❌ MongoDB error:', err));
 
-async function run() {
+// 🔽 POST route: user add করা                    
+app.post('/users', async (req, res) => {
   try {
-    await client.connect();
-//----------------------------------------------------->
-
- const userCollection = client.db('slys-messenger').collection('user-datas');
- const messageCollection = client.db('slys-messenger').collection('message-datas');
-
-// Post User datas
-app.post('/user-datas', async(req,res)=> {
-  const datas = req.body;
-  const result = await userCollection.insertOne(datas);
-  res.send(result);
- });
-// Get User Datas
-app.get('/user-datas', async(req,res)=> {
-  const cursor = userCollection.find();
-  const result = await cursor.toArray();
-  res.send(result);
-});
-
-// Message datas Post
-app.post('/message-datas', async(req,res)=> {
-  const datas = req.body;
-  const result = await messageCollection.insertOne(datas);
-  res.send(result); 
-});
-// Message datas Get
-app.get('/message-datas', async(req,res)=> {
-  const cursor = messageCollection.find();
-  const result = await cursor.toArray();
-  res.send(result);
-});
-
-//----------------------------------------------------->
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // await client.close();
+    const { name, email, age } = req.body;
+    const newUser = new User({ name, email, age });
+    const savedUser = await newUser.save();
+    res.status(201).json(savedUser);
+  } catch (error) {
+    res.status(500).json({ error: 'User create failed' });
   }
-}
-run().catch(console.dir);
+});
+
+// get
+app.get('/users', async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
+});
 
 
-//---------------------------------------------------------------->
 
-app.listen(port, ()=> console.log('Slys Messenger Server is Running on port -', port));
+
+
+
+
+
+
+
+app.listen(port, () => {
+  console.log(`🚀 Server is running at http://localhost:${port}`);
+});
