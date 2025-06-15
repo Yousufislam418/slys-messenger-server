@@ -24,9 +24,9 @@ app.get('/', async(req,res)=> {
 
 //----------------------------------------------------------------> 
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.idipp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
-const client = new MongoClient(uri, {
+
+const client = new MongoClient(process.env.MONGODB_URI, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
