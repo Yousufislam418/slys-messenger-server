@@ -24,18 +24,18 @@ app.get('/', async(req,res)=> {
 });
 
 //----------------------------------------------------------------> 
-// const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
-// const client = new MongoClient(process.env.MONGODB_URI, {
-//   serverApi: {
-//     version: ServerApiVersion.v1,
-//     strict: true,
-//     deprecationErrors: true,
-//   }
-// });
+const client = new MongoClient(process.env.MONGODB_URI, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
 
 // MongoDB connect
-const client = mongoose.connect(process.env.MONGODB_URI, {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
