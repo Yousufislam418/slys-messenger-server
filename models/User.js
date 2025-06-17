@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
   number: { type: String, required: true, trim: true },
   password: { type: String, required: true, minlength: 6 },
   img: { type: String, default: '' },
-  date: { type: Date, default: Date.now }
+  date: { type: String }
 }, {
   collection: 'users',
   versionKey: false

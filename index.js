@@ -10,6 +10,7 @@ app.use(cors());
 const User = require('./models/User');
 const Conversation = require('./models/Conversation');
 
+app.get('/', (req,res)=> { res.send(console.log('Slys Messenger Server is online'));});
 
 // MongoDB connect
 mongoose.connect(process.env.MONGODB_URI, {
@@ -33,7 +34,7 @@ app.post('/users', async (req, res) => {
 });
 
 // ✅ GET Route : User data
-app.get('/users', async (req, res) => {
+app.get('/users', async(req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -46,7 +47,7 @@ app.get('/users', async (req, res) => {
 
 //----------------------------------------------------->
 // 🔽 POST route: Conversation data                  
-app.post('/conversation', async (req, res) => {
+app.post('/conversation', async(req, res) => {
   try {
     const { sentUser, receiveUser, text, date } = req.body;
     const newConversation = new Conversation({ sentUser, receiveUser, text, date });
