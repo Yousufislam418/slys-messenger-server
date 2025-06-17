@@ -1,34 +1,30 @@
-// index.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const User = require('./models/User');
-
-require('dotenv').config(); // যদি .env ব্যবহার করো
-
+const port = process.env.PORT || 3000;
+require('dotenv').config(); 
 const app = express();
-const port = 3000;
-
-// Middleware
-app.use(cors());
 app.use(express.json());
+app.use(cors());
+
+const User = require('./models/User');
+const Conversation = require('./models/Conversation');
+
 
 // MongoDB connect
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-})
-.then(() => {
-  console.log('✅ MongoDB connected');
-  // console.log(console.log('📂 Connected Database Name:', mongoose.connection.db.databaseName));
-})
-.catch(err => console.error('❌ MongoDB error:', err));
+}).then(() => {console.log('✅ MongoDB connected');})
+  .catch(err => console.error('❌ MongoDB error:', err));
 
-// 🔽 POST route: user add করা                    
+//--------------------------------------------------------------------------->
+
+// 🔽 POST route: User data                  
 app.post('/users', async (req, res) => {
   try {
-    const { name, email, age } = req.body;
-    const newUser = new User({ name, email, age });
+    const { name, email, number, password, img, date } = req.body;
+    const newUser = new User({ name, email, number, password, img, date });
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);
   } catch (error) {
@@ -36,7 +32,7 @@ app.post('/users', async (req, res) => {
   }
 });
 
-// get
+// ✅ GET Route : User data
 app.get('/users', async (req, res) => {
   try {
     const users = await User.find();
@@ -48,12 +44,32 @@ app.get('/users', async (req, res) => {
 
 
 
+//----------------------------------------------------->
+// 🔽 POST route: Conversation data                  
+app.post('/conversation', async (req, res) => {
+  try {
+    const { sentUser, receiveUser, text, date } = req.body;
+    const newConversation = new Conversation({ sentUser, receiveUser, text, date });
+    const saveConversation = await newConversation.save();
+    res.status(201).json(saveConversation);
+  } catch (error) {
+    res.status(500).json({ error: 'Conversation create failed' });
+  }
+});
+
+// ✅ GET Route : Conversation data
+app.get('/conversation', async (req, res) => {
+  try {
+    const conversation = await Conversation.find();
+    res.json(conversation);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch Conversation' });
+  }
+});
 
 
 
-
-
-
+//------------------------------------------------------------------------>
 
 app.listen(port, () => {
   console.log(`🚀 Server is running at http://localhost:${port}`);
