@@ -10,7 +10,7 @@ app.use(cors());
 const User = require('./models/User');
 const Conversation = require('./models/Conversation');
 
-app.get('/', (req,res)=> { res.send(console.log('Slys Messenger Server is online'));});
+app.get('/', (req,res)=> { res.send('Slys Messenger Server is online')});
 
 // MongoDB connect
 mongoose.connect(process.env.MONGODB_URI, {
@@ -45,6 +45,32 @@ app.get('/users', async(req, res) => {
 
 
 
+// ✅ UPDATE - PUT
+app.put('/users/:id', async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ error: 'Update failed' });
+  }
+});
+
+// ✅ DELETE
+app.delete('/users/:id', async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.json({ message: 'User deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Delete failed' });
+  }
+});
+
+
+
 //----------------------------------------------------->
 // 🔽 POST route: Conversation data                  
 app.post('/conversation', async(req, res) => {
@@ -73,5 +99,5 @@ app.get('/conversation', async (req, res) => {
 //------------------------------------------------------------------------>
 
 app.listen(port, () => {
-  console.log(`🚀 Server is running at http://localhost:${port}`);
+  // console.log(`🚀 Slys Messenger server is Running on Port - ${port}`); 
 });
