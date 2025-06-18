@@ -27,7 +27,7 @@ app.post('/users', async (req, res) => {
     const { name, email, number, password, img, date } = req.body;
     const newUser = new User({ name, email, number, password, img, date });
     const savedUser = await newUser.save();
-    res.status(201).json(savedUser);
+    res.status(201).json(savedUser).send(savedUser);
   } catch (error) {
     res.status(500).json({ error: 'User create failed' });
   }
@@ -37,7 +37,7 @@ app.post('/users', async (req, res) => {
 app.get('/users', async(req, res) => {
   try {
     const users = await User.find();
-    res.json(users);
+    res.json(users).send(users);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch users' });
   }
@@ -53,7 +53,7 @@ app.put('/users/:id', async (req, res) => {
       req.body,
       { new: true }
     );
-    res.json(updatedUser);
+    res.json(updatedUser).send(updatedUser);
   } catch (err) {
     res.status(500).json({ error: 'Update failed' });
   }
@@ -62,8 +62,8 @@ app.put('/users/:id', async (req, res) => {
 // ✅ DELETE
 app.delete('/users/:id', async (req, res) => {
   try {
-    await User.findByIdAndDelete(req.params.id);
-    res.json({ message: 'User deleted successfully' });
+   const result = await User.findByIdAndDelete(req.params.id);
+    res.json({ message: 'User deleted successfully' }).send(result);
   } catch (err) {
     res.status(500).json({ error: 'Delete failed' });
   }
@@ -78,7 +78,7 @@ app.post('/conversation', async(req, res) => {
     const { sentUser, receiveUser, text, date } = req.body;
     const newConversation = new Conversation({ sentUser, receiveUser, text, date });
     const saveConversation = await newConversation.save();
-    res.status(201).json(saveConversation);
+    res.status(201).json(saveConversation).send(saveConversation);
   } catch (error) {
     res.status(500).json({ error: 'Conversation create failed' });
   }
@@ -88,7 +88,7 @@ app.post('/conversation', async(req, res) => {
 app.get('/conversation', async (req, res) => {
   try {
     const conversation = await Conversation.find();
-    res.json(conversation);
+    res.json(conversation).send(conversation);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch Conversation' });
   }
