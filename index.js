@@ -24,8 +24,8 @@ mongoose.connect(process.env.MONGODB_URI, {
 // 🔽 POST route: User data                  
 app.post('/users', async (req, res) => {
   try {
-    const { name, email, number, password, img, date } = req.body;
-    const newUser = new User({ name, email, number, password, img, date });
+    const { name, email, number, password, location, image, date } = req.body;
+    const newUser = new User({ name, email, number, password, location, image, date });
     const savedUser = await newUser.save();
     res.status(201).json(savedUser).send(savedUser);
   } catch (error) {

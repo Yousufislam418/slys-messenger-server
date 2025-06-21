@@ -5,7 +5,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   number: { type: String, required: true, trim: true },
   password: { type: String, required: true, minlength: 6 },
-  img: { type: String, default: '' },
+  location: { type: String },
+  image: { type: String, default: '' },
   date: { type: String }
 }, {
   collection: 'users',
