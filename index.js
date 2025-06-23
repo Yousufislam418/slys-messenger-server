@@ -48,11 +48,7 @@ app.get('/users', async(req, res) => {
 // ✅ UPDATE - PUT
 app.put('/users/:id', async (req, res) => {
   try {
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
+ const updatedUser = await User.findByIdAndUpdate(req.params.id,req.body,{ new: true });
     res.json(updatedUser).send(updatedUser);
   } catch (err) {
     res.status(500).json({ error: 'Update failed' });
@@ -93,6 +89,7 @@ app.get('/conversation', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch Conversation' });
   }
 });
+
 
 
 

@@ -4,7 +4,7 @@ const conversationSchema = new mongoose.Schema({
   sentUser: { type: String, required: true },
   receiveUser: { type: String, required: true },
   text: { type: String, required: true },
-  date: { type: Date, default: Date.now }
+  date: { type: String }
 }, {
   collection: 'conversation',
   versionKey: false
